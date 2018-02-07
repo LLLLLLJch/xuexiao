@@ -14,10 +14,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>学生信息</title>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/third/css/bootstrap.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/bootstrap-datetimepicker.min.css"/>
 <script src="${pageContext.request.contextPath}/third/js/jquery.js" type="text/javascript" charset="utf-8"></script>
 <script src="${pageContext.request.contextPath}/third/js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.js" type="text/javascript" charset="utf-8"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.zh-CN.js" type="text/javascript" charset="utf-8"></script>
 <script src="${pageContext.request.contextPath}/third/layer-v3.1.1/layer/layer.js" type="text/javascript"></script>
 <script>
+
+
 	function goPage(pageIndex) {
 		$('#pageIndex').val(pageIndex);
 		$('#searchForm').submit();
@@ -126,18 +131,15 @@
 </script>
 </head>
 <body>
-	<form class="form-inline" action="${pageContext.request.contextPath}/studentIndex/findStudent.action" method="post" id="searchForm">
-	  <input type="hidden" name="pageIndexStr" id="pageIndex" />
-	  <label for="exampleInputName2">姓名</label>
-	    <input type="text" class="form-control" id="name" name="name" value="${findStudentByCondition.name}">
+	<form class="form-inline" action="${pageContext.request.contextPath}/noticeIndex/findNoticeByCondition.action" method="post" id="searchForm">
+	  <div>
+		  <input type="hidden" name="pageIndexStr" id="pageIndex" />
+	                    标题<input type="text" class="form-control" id="title" name="title" value="${findStudentByCondition.name}">
 	  </div>
-	  <div class="form-group">
-	    <label for="exampleInputName2">性别</label>
-	    <select class="form-control" name="gender" id="gender">
-		  <option id="s1" value="0">-请选择-</option>
-		  <option id="s2" value="2">男</option>
-		  <option id="s3" value="3">女</option>
-		</select>
+	  <div>
+	              起止日期 <input size="16" type="text" name="startTime" id="datetimeStart" readonly class="form_datetime form-control">
+		 --
+		 <input size="16" type="text" name="endTime" id="datetimeEnd" readonly class="form_datetime form-control"">
 	  </div>
 	  <button type="button" class="btn btn-default" onclick="removeAll();">清空</button> &nbsp;&nbsp;
 	  <button type="submit" class="btn btn-default">搜索</button>
@@ -207,5 +209,25 @@
 			</c:if>
 		</ul>
 	</nav>
+	<script type="text/javascript">
+	 $("#datetimeStart").datetimepicker({
+	        format: 'yyyy-mm-dd',
+	        minView:'month',
+	        language: 'zh-CN',
+	        autoclose:true,
+	        startDate:new Date()
+	    }).on("click",function(){
+	        $("#datetimeStart").datetimepicker("setEndDate",$("#datetimeEnd").val())
+	    });
+	    $("#datetimeEnd").datetimepicker({
+	        format: 'yyyy-mm-dd',
+	        minView:'month',
+	        language: 'zh-CN',
+	        autoclose:true,
+	        startDate:new Date()
+	    }).on("click",function(){
+	        $("#datetimeEnd").datetimepicker("setStartDate",$("#datetimeStart".val()))
+	    });
+	</script>
 </body>
 </html>

@@ -112,13 +112,6 @@
 							</c:if>
 							<li><a class="J_menuItem" href="${pageContext.request.contextPath}/noticeIndex/goAddPage.action">发布公告</a>
 							</li>
-							<li><a class="J_menuItem" href="table_jqgrid.html">jqGrid</a>
-							</li>
-							<li><a class="J_menuItem" href="table_foo_table.html">Foo
-									Tables</a></li>
-							<li><a class="J_menuItem" href="table_bootstrap.html">Bootstrap
-									Table <span class="label label-danger pull-right">推荐</span>
-							</a></li>
 						</ul></li>
 					<li class="line dk"></li>
 					<li class="hidden-folded padder m-t m-b-sm text-muted text-xs">

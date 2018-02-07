@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import com.situ.xuexiao.dao.NoticeDao;
 import com.situ.xuexiao.pojo.Notice;
 import com.situ.xuexiao.service.INoticeService;
 import com.situ.xuexiao.vo.AskLeaveVO;
+import com.situ.xuexiao.vo.FindNoticeByCondition;
 import com.situ.xuexiao.vo.PageBean;
 @Service
 public class NoticeServiceImpl implements INoticeService{
@@ -69,5 +72,47 @@ public class NoticeServiceImpl implements INoticeService{
 			return SeverResponse.createSuccess("发布成功");
 		}
 		return SeverResponse.createError("发布失败");
+	}
+
+	@Override
+	public PageBean<Notice> findNoticeByCondition(int pageIndex, int pageSize,
+			FindNoticeByCondition findNoticeByCondition) {
+		PageBean<Notice> pageBean = new PageBean<Notice>();
+		pageBean.setPageIndex(pageIndex);
+		pageBean.setPageSize(pageSize);
+		int totalCount = noticeDao.findNoticeCountByCondition(findNoticeByCondition);
+		pageBean.setTotalCount(totalCount);
+		int totalPage = (int) Math.ceil(1.0 * totalCount / pageSize);
+		pageBean.setTotalPage(totalPage);
+		int index = (pageIndex - 1) * pageSize;
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("index", index);
+		map.put("pageSize", pageSize);
+		map.put("findNoticeByCondition", findNoticeByCondition);
+		List<Notice> list = noticeDao.findNoticeByCondition(map);
+		pageBean.setList(list);
+		return pageBean;
+	}
+
+	@Override
+	public PageBean<Notice> findStudentNoticeByCondition(int pageIndex, int pageSize,
+			FindNoticeByCondition findNoticeByCondition) {
+		PageBean<Notice> pageBean = new PageBean<Notice>();
+		pageBean.setPageIndex(pageIndex);
+		pageBean.setPageSize(pageSize);
+		int totalCount = noticeDao.findStudentNoticeCountByCondition(findNoticeByCondition);
+		System.out.println(totalCount);
+		pageBean.setTotalCount(totalCount);
+		int totalPage = (int) Math.ceil(1.0 * totalCount / pageSize);
+		pageBean.setTotalPage(totalPage);
+		int index = (pageIndex - 1) * pageSize;
+		Map<String, Object> map = new HashMap<String,Object>();
+		map.put("index", index);
+		map.put("pageSize", pageSize);
+		map.put("findNoticeByCondition", findNoticeByCondition);
+		List<Notice> list = noticeDao.findStudentNoticeByCondition(map);
+		System.out.println(list);
+		pageBean.setList(list);
+		return pageBean;
 	}
 }

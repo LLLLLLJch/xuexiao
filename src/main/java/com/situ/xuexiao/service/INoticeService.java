@@ -2,6 +2,7 @@ package com.situ.xuexiao.service;
 
 import com.situ.xuexiao.common.SeverResponse;
 import com.situ.xuexiao.pojo.Notice;
+import com.situ.xuexiao.vo.FindNoticeByCondition;
 import com.situ.xuexiao.vo.PageBean;
 
 public interface INoticeService {
@@ -13,5 +14,10 @@ public interface INoticeService {
 	SeverResponse<Notice> addAllNotice(Notice newNotice);
 
 	SeverResponse<Notice> addTeacherNotice(Notice newNotice);
+
+	PageBean<Notice> findNoticeByCondition(int pageIndex, int pageSize, FindNoticeByCondition findNoticeByCondition);
+
+	PageBean<Notice> findStudentNoticeByCondition(int pageIndex, int pageSize,
+			FindNoticeByCondition findNoticeByCondition);
 
 }

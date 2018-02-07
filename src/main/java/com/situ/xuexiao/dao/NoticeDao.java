@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.situ.xuexiao.pojo.Notice;
+import com.situ.xuexiao.vo.FindNoticeByCondition;
 
 public interface NoticeDao {
 
@@ -18,5 +19,13 @@ public interface NoticeDao {
 	int addAllNotice(Notice notice);
 
 	int addTeacherNotice(Notice notice);
+
+	int findNoticeCountByCondition(FindNoticeByCondition findNoticeByCondition);
+
+	List<Notice> findNoticeByCondition(Map<String, Object> map);
+
+	int findStudentNoticeCountByCondition(FindNoticeByCondition findNoticeByCondition);
+
+	List<Notice> findStudentNoticeByCondition(Map<String, Object> map);
 
 }

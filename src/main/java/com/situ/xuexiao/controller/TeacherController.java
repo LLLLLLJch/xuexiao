@@ -50,10 +50,10 @@ public class TeacherController {
 	public String findAllTeacher(Model model, String pageIndexStr, String pageSizeStr) {
 		int pageIndex = 1;
 		int pageSize = 12;
-		if (pageIndexStr != null && pageIndexStr.equals("")) {
+		if (pageIndexStr != null && !pageIndexStr.equals("")) {
 			pageIndex = Integer.parseInt(pageIndexStr);
 		}
-		if (pageSizeStr != null && pageSizeStr.equals("")) {
+		if (pageSizeStr != null && !pageSizeStr.equals("")) {
 			pageSize = Integer.parseInt(pageSizeStr);
 		}
 		PageBean<Teacher> pageBean = teacherService.findAllTeacer(pageIndex, pageSize);

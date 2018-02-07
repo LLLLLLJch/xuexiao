@@ -63,4 +63,70 @@
    			insert into notice(ID,title,content,postedDate,picture,publisher,category_id)
    			values(#{ID},#{title},#{content},#{postedDate},#{picture},#{publisher.sequenceNO},21);
    		</insert>
+   		
+   		<select id="findNoticeCountByCondition" parameterType="FindNoticeByCondition" resultType="int">
+   			select count(*)
+			FROM notice AS n INNER JOIN teacher AS t 
+			ON n.publisher = t.sequenceNO INNER JOIN category AS c
+			ON c.sequenceNO = n.category_id
+			<where>
+				 c.parentID = 4 or c.parentID = 26 
+				<if test="title != null || title != '' ">
+					and n.title = #{title}
+				</if>
+				<if test="startTime != null and endTime != null">
+					and n.postedDate between  #{startTime} and #{endTime}
+				</if>
+			</where>
+   		</select>
+   		
+   		<select id="findStudentNoticeCountByCondition" parameterType="FindNoticeByCondition" resultType="int">
+   			select count(*)
+			FROM notice AS n INNER JOIN teacher AS t 
+			ON n.publisher = t.sequenceNO INNER JOIN category AS c
+			ON c.sequenceNO = n.category_id
+			<where>
+				 c.parentID = 26
+				<if test="title != null || title != '' ">
+					and n.title = #{title}
+				</if>
+				<if test="startTime != null and endTime != null ">
+					and n.postedDate between  #{startTime} and #{endTime}
+				</if>
+			</where>
+   		</select>
+   		
+   		<select id="findNoticeByCondition" parameterType="Map" resultMap="findNotice">
+   			SELECT n.sequenceNO,n.ID,n.title,n.content,n.category_id,n.picture,n.postedDate,t.sequenceNO AS teacherSequenceNO,t.ID AS teacherID,t.name,c.ID AS categoryID,c.parentID 
+			FROM notice AS n INNER JOIN teacher AS t 
+			ON n.publisher = t.sequenceNO INNER JOIN category AS c
+			ON c.sequenceNO = n.category_id 
+			<where>
+				 c.parentID = 4 or c.parentID = 26 
+				<if test="title != null || title != '' ">
+					and n.title = #{title}
+				</if>
+				<if test="startTime != null and endTime != null ">
+					and n.postedDate between  #{startTime} and #{endTime}
+				</if>
+			</where>
+			 limit #{index},#{pageSize}
+   		</select>
+   		
+   		<select id="findStudentNoticeByCondition" parameterType="Map" resultMap="findNotice">
+   			SELECT n.sequenceNO,n.ID,n.title,n.content,n.category_id,n.picture,n.postedDate,t.sequenceNO AS teacherSequenceNO,t.ID AS teacherID,t.name,c.ID AS categoryID,c.parentID 
+			FROM notice AS n INNER JOIN teacher AS t 
+			ON n.publisher = t.sequenceNO INNER JOIN category AS c
+			ON c.sequenceNO = n.category_id 
+			<where>
+				 c.parentID = 26 
+				<if test="title != null || title != '' ">
+					and n.title = #{title}
+				</if>
+				<if test="startTime != null and endTime != null ">
+					and n.postedDate between  #{startTime} and #{endTime}
+				</if>
+			</where>
+			 limit #{index},#{pageSize}
+   		</select>
    </mapper>

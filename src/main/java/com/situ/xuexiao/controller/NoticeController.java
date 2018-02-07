@@ -16,7 +16,7 @@ import com.situ.xuexiao.common.SeverResponse;
 import com.situ.xuexiao.pojo.Notice;
 import com.situ.xuexiao.pojo.Teacher;
 import com.situ.xuexiao.service.INoticeService;
-import com.situ.xuexiao.vo.AskLeaveVO;
+import com.situ.xuexiao.vo.FindNoticeByCondition;
 import com.situ.xuexiao.vo.PageBean;
 
 @Controller
@@ -50,10 +50,10 @@ public class NoticeController {
 	public String findTeacherNotice(Model model,String pageIndexStr,String pageSizeStr) {
 		int pageIndex = 1;
 		int pageSize = 12;
-		if (pageIndexStr != null && pageIndexStr.equals("")) {
+		if (pageIndexStr != null && !pageIndexStr.equals("")) {
 			pageIndex = Integer.parseInt(pageIndexStr);
 		}
-		if (pageSizeStr != null && pageSizeStr.equals("")) {
+		if (pageSizeStr != null && !pageSizeStr.equals("")) {
 			pageSize = Integer.parseInt(pageSizeStr);
 		}
 		PageBean<Notice> pageBean = noticeService.findTeacherNotice(pageIndex, pageSize);
@@ -75,5 +75,30 @@ public class NoticeController {
 		}
 		//仅教师可见
 		return noticeService.addTeacherNotice(newNotice);
+	}
+	
+	@RequestMapping("findNoticeByCondition")
+	public String findNoticeByCondition(HttpServletRequest request,Model model,FindNoticeByCondition findNoticeByCondition,String pageIndexStr,String pageSizeStr) {
+		System.out.println(findNoticeByCondition);
+		int pageIndex = 1;
+		int pageSize = 12;
+		if (pageIndexStr != null && !pageIndexStr.equals("")) {
+			pageIndex = Integer.parseInt(pageIndexStr);
+		}
+		if (pageSizeStr != null && !pageSizeStr.equals("")) {
+			pageSize = Integer.parseInt(pageSizeStr);
+		}
+		HttpSession session = request.getSession();
+		int num = (int) session.getAttribute("num");
+		if(num == 1) {
+			System.out.println("22222222222");
+			PageBean<Notice> pageBean = noticeService.findStudentNoticeByCondition(pageIndex, pageSize,findNoticeByCondition);
+			model.addAttribute("pageBean", pageBean);
+			return "notice_list";
+		}
+		System.out.println("111111111111");
+		PageBean<Notice> pageBean = noticeService.findNoticeByCondition(pageIndex, pageSize,findNoticeByCondition);
+		model.addAttribute("pageBean", pageBean);
+		return "notice_list";
 	}
 }
