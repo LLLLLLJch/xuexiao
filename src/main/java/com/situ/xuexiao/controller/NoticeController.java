@@ -91,14 +91,14 @@ public class NoticeController {
 		HttpSession session = request.getSession();
 		int num = (int) session.getAttribute("num");
 		if(num == 1) {
-			System.out.println("22222222222");
 			PageBean<Notice> pageBean = noticeService.findStudentNoticeByCondition(pageIndex, pageSize,findNoticeByCondition);
 			model.addAttribute("pageBean", pageBean);
+			model.addAttribute("findNoticeByCondition", findNoticeByCondition);
 			return "notice_list";
 		}
-		System.out.println("111111111111");
 		PageBean<Notice> pageBean = noticeService.findNoticeByCondition(pageIndex, pageSize,findNoticeByCondition);
 		model.addAttribute("pageBean", pageBean);
+		model.addAttribute("findNoticeByCondition", findNoticeByCondition);
 		return "notice_list";
 	}
 }

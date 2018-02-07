@@ -88,8 +88,11 @@ public class NoticeServiceImpl implements INoticeService{
 		Map<String, Object> map = new HashMap<String,Object>();
 		map.put("index", index);
 		map.put("pageSize", pageSize);
-		map.put("findNoticeByCondition", findNoticeByCondition);
+		map.put("title", findNoticeByCondition.getTitle());
+		map.put("startTime", findNoticeByCondition.getStartTime());
+		map.put("endTime", findNoticeByCondition.getEndTime());
 		List<Notice> list = noticeDao.findNoticeByCondition(map);
+		System.out.println(list);
 		pageBean.setList(list);
 		return pageBean;
 	}
@@ -109,7 +112,9 @@ public class NoticeServiceImpl implements INoticeService{
 		Map<String, Object> map = new HashMap<String,Object>();
 		map.put("index", index);
 		map.put("pageSize", pageSize);
-		map.put("findNoticeByCondition", findNoticeByCondition);
+		map.put("title", findNoticeByCondition.getTitle());
+		map.put("startTime", findNoticeByCondition.getStartTime());
+		map.put("endTime", findNoticeByCondition.getEndTime());
 		List<Notice> list = noticeDao.findStudentNoticeByCondition(map);
 		System.out.println(list);
 		pageBean.setList(list);

@@ -70,8 +70,8 @@
 			ON n.publisher = t.sequenceNO INNER JOIN category AS c
 			ON c.sequenceNO = n.category_id
 			<where>
-				 c.parentID = 4 or c.parentID = 26 
-				<if test="title != null || title != '' ">
+				 (c.parentID = 4 or c.parentID = 26) 
+				<if test="title != null and title != '' ">
 					and n.title = #{title}
 				</if>
 				<if test="startTime != null and endTime != null">
@@ -87,7 +87,7 @@
 			ON c.sequenceNO = n.category_id
 			<where>
 				 c.parentID = 26
-				<if test="title != null || title != '' ">
+				<if test="title != null and title != '' ">
 					and n.title = #{title}
 				</if>
 				<if test="startTime != null and endTime != null ">
@@ -102,8 +102,8 @@
 			ON n.publisher = t.sequenceNO INNER JOIN category AS c
 			ON c.sequenceNO = n.category_id 
 			<where>
-				 c.parentID = 4 or c.parentID = 26 
-				<if test="title != null || title != '' ">
+				 (c.parentID = 4 or c.parentID = 26) 
+				<if test="title != null and title != '' ">
 					and n.title = #{title}
 				</if>
 				<if test="startTime != null and endTime != null ">
@@ -120,7 +120,7 @@
 			ON c.sequenceNO = n.category_id 
 			<where>
 				 c.parentID = 26 
-				<if test="title != null || title != '' ">
+				<if test="title != null and title != '' ">
 					and n.title = #{title}
 				</if>
 				<if test="startTime != null and endTime != null ">

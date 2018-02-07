@@ -27,16 +27,22 @@
     </script>
     <script type="text/javascript">
     $(function(){
+    	$("#student").css("color", "black");
+    	$("#teacher").css("color", "white");
     	$("#studentDiv").show();
     	$("#teacherDiv").hide();
     });
     
     function studentLogin(){
+    	$("#student").css("color", "black");
+    	$("#teacher").css("color", "white");
     	$("#studentDiv").show();
     	$("#teacherDiv").hide();
     }
     
     function teacherLogin(){
+    	$("#student").css("color", "white");
+    	$("#teacher").css("color", "black");
     	$("#studentDiv").hide();
     	$("#teacherDiv").show();
     }
@@ -50,7 +56,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <h4 class="no-margins">登录：</h4>
-                <span class="m-t-md" onclick="studentLogin();">学生登录</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="m-t-md" onclick="teacherLogin();">教师登录</span>
+                <span class="m-t-md" onclick="studentLogin();"  id="student">学生登录</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="m-t-md" onclick="teacherLogin();" id="teacher">教师登录</span>
                 <div id="studentDiv">
                 	<form action="${pageContext.request.contextPath}/login/studentLogin.action" method="post">
 						<input type="text" class="form-control uname" placeholder="用户名" name="name"/>

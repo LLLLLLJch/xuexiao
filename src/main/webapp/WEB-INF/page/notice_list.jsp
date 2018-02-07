@@ -21,8 +21,6 @@
 <script src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.zh-CN.js" type="text/javascript" charset="utf-8"></script>
 <script src="${pageContext.request.contextPath}/third/layer-v3.1.1/layer/layer.js" type="text/javascript"></script>
 <script>
-
-
 	function goPage(pageIndex) {
 		$('#pageIndex').val(pageIndex);
 		$('#searchForm').submit();
@@ -114,7 +112,11 @@
 	
 	function removeAll(){
 		$("#searchForm")[0].reset(); 
-		window.location.href="${pageContext.request.contextPath}/studentIndex/findAllStudents.action";
+		if('${num}' == '1'){
+			window.location.href="${pageContext.request.contextPath}/noticeIndex/findStudentNotice.action";
+		}else{
+			window.location.href="${pageContext.request.contextPath}/noticeIndex/findTeacherNotice.action";
+		}
 	}
 	
 	function showStudent(ID){
@@ -134,12 +136,13 @@
 	<form class="form-inline" action="${pageContext.request.contextPath}/noticeIndex/findNoticeByCondition.action" method="post" id="searchForm">
 	  <div>
 		  <input type="hidden" name="pageIndexStr" id="pageIndex" />
-	                    标题<input type="text" class="form-control" id="title" name="title" value="${findStudentByCondition.name}">
+	                    标题<input type="text" class="form-control" id="title" name="title" value="${findNoticeByCondition.title}">
 	  </div>
+	  &nbsp;&nbsp;&nbsp;&nbsp;
 	  <div>
-	              起止日期 <input size="16" type="text" name="startTime" id="datetimeStart" readonly class="form_datetime form-control">
+	              起止日期<input type="text" class="form-control" value="<fmt:formatDate value='${findNoticeByCondition.startTime}' pattern='yyyy-MM-dd'/>" name="startTime" id="datetimepicker1">
 		 --
-		 <input size="16" type="text" name="endTime" id="datetimeEnd" readonly class="form_datetime form-control"">
+		  <input type="text" class="form-control" value="<fmt:formatDate value='${findNoticeByCondition.endTime}' pattern='yyyy-MM-dd'/>" name="endTime" id="datetimepicker2">
 	  </div>
 	  <button type="button" class="btn btn-default" onclick="removeAll();">清空</button> &nbsp;&nbsp;
 	  <button type="submit" class="btn btn-default">搜索</button>
@@ -210,24 +213,18 @@
 		</ul>
 	</nav>
 	<script type="text/javascript">
-	 $("#datetimeStart").datetimepicker({
-	        format: 'yyyy-mm-dd',
-	        minView:'month',
-	        language: 'zh-CN',
-	        autoclose:true,
-	        startDate:new Date()
-	    }).on("click",function(){
-	        $("#datetimeStart").datetimepicker("setEndDate",$("#datetimeEnd").val())
-	    });
-	    $("#datetimeEnd").datetimepicker({
-	        format: 'yyyy-mm-dd',
-	        minView:'month',
-	        language: 'zh-CN',
-	        autoclose:true,
-	        startDate:new Date()
-	    }).on("click",function(){
-	        $("#datetimeEnd").datetimepicker("setStartDate",$("#datetimeStart".val()))
-	    });
+	$("#datetimepicker1").datetimepicker({
+		  minView: "month",//设置只显示到月份
+		  format : "yyyy-mm-dd",//日期格式
+		  autoclose:true,//选中关闭
+		  todayBtn: true//今日按钮
+		});
+	$("#datetimepicker2").datetimepicker({
+		  minView: "month",//设置只显示到月份
+		  format : "yyyy-mm-dd",//日期格式
+		  autoclose:true,//选中关闭
+		  todayBtn: true//今日按钮
+		});
 	</script>
 </body>
 </html>
