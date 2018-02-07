@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+   <mapper namespace="com.situ.xuexiao.dao.AskLeaveDao">
+   		<resultMap type="AskLeave" id="findAskLeave">
+   			<id column="sequenceNO" property="sequenceNO"/>
+	  		<result column="ID" property="ID"/>	
+	  		<result column="content" property="content"/>	
+	  		<result column="startTime" property="startTime"/>	
+	  		<result column="endTime" property="endTime"/>	
+	  		<result column="postedDate" property="postedDate"/>	
+	  		<result column="releasePeople" property="releasePeople"/>	
+	  		<result column="postedDate" property="postedDate"/>	
+	  		<association property="category" javaType="Category">
+	  			<id column="SequenceNO" property="sequenceNO"/>
+	  			<result column="ID" property="ID"/>
+	  			<result column="parentID" property="parentID"/>
+	  			<result column="title" property="title"/>
+	  		</association>	
+	  		<association property="status" javaType="Category">
+	  			<id column="SequenceNO" property="sequenceNO"/>
+	  			<result column="ID" property="ID"/>
+	  			<result column="parentID" property="parentID"/>
+	  			<result column="title" property="title"/>
+	  		</association>	
+	  		<association property="dealResult" javaType="Category">
+	  			<id column="askLeaveSequenceNO" property="sequenceNO"/>
+	  			<result column="askLeaveID" property="ID"/>
+	  			<result column="parentID" property="parentID"/>
+	  			<result column="title" property="title"/>
+	  		</association>	
+	  		<association property="recipient" javaType="Teacher">
+	  			<id column="sequenceNO" property="sequenceNO"/>
+		  		<result column="ID" property="ID"/>	
+		  		<result column="name" property="name"/>	
+		  		<result column="age" property="age"/>	
+		  		<result column="gender" property="gender"/>	
+		  		<result column="address" property="address"/>	
+		  		<result column="birthday" property="birthday"/>
+		  		<result column="picture" property="picture"/>
+	  		</association>	
+   		</resultMap>
+   		
+   		<resultMap type="AskLeaveVO" id="findAskLeaveVO">
+   			<id column="ID" property="ID"/>
+	  		<result column="content" property="content"/>	
+	  		<result column="startTime" property="startTime"/>	
+	  		<result column="endTime" property="endTime"/>	
+	  		<result column="startTime" property="startTime"/>	
+	  		<result column="postedDate" property="postedDate"/>	
+	  		<result column="category_id" property="type"/>	
+	  		<result column="status" property="status"/>	
+	  		<result column="dealResult" property="dealResult"/>	
+	  		<result column="releasePeople" property="releasePeople"/>	
+	  		<result column="recipient" property="recipient"/>	
+   		</resultMap>
+   		
+   		<select id="findAskLeaveByTeacherID" parameterType="int" resultMap="findAskLeave">
+   			select * from askleave where recipient = #{ID} and status = 11 ORDER BY postedDate DESC;	
+   		</select>
+   		
+   		<select id="findAskLeaveCount" parameterType="String" resultType="int">
+   			select count(*) from askleave where recipient = #{ID};
+   		</select>
+   		
+   		<select id="findAllAskLeavePageBean" parameterType="Map" resultMap="findAskLeaveVO">
+   			select * from askleave where recipient = #{ID} ORDER BY postedDate DESC limit #{index},#{pageSize}
+   		</select>
+   		
+   		<insert id="addTeacherAskLeave" parameterType="AskLeave">
+   			insert into askleave(ID,content,startTime,endTime,postedDate,category_id,status,releasePeople,recipient)
+   			values(#{ID},#{content},#{startTime},#{endTime},#{postedDate},#{category.ID},11,#{releasePeople},5);
+   		</insert>
+   		
+   		<insert id="addStudentAskLeave" parameterType="AskLeave">
+   			insert into askleave(ID,content,startTime,endTime,postedDate,category_id,status,releasePeople,recipient)
+   			values(#{ID},#{content},#{startTime},#{endTime},#{postedDate},#{category.ID},11,#{releasePeople},#{recipient.sequenceNO});
+   		</insert>
+   		
+   		<select id="findAskLeaveCountByReleasePeople" parameterType="String" resultType="int">
+   			select count(*) from askleave where releasePeople = #{name} ORDER BY postedDate DESC;
+   		</select> 
+   		
+   		<select id="findAllAskLeavePageBeanByReleasePeople" parameterType="Map" resultMap="findAskLeaveVO">
+   			select * from askleave
+			where releasePeople = #{name} ORDER BY postedDate DESC limit #{index},#{pageSize}
+   		</select>
+   		
+   		<update id="agreeAskLeave" parameterType="String">
+   			update askleave set dealResult = 24,status = 12 where ID = #{ID}
+   		</update>
+   		
+   		<update id="disAgreeAskLeave" parameterType="String">
+   			update askleave set dealResult = 25,status = 12 where ID = #{ID}
+   		</update>
+   </mapper>

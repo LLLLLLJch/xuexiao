@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+   <mapper namespace="com.situ.xuexiao.dao.CourseDao">
+   		<resultMap type="Course" id="findCourse">
+   			<id column="sequenceNO" property="sequenceNO"/>
+	  		<result column="ID" property="ID"/>	
+	  		<result column="name" property="name"/>	
+	  		<result column="score" property="score"/>	
+	  		<association property="category" javaType="Category">
+	  			<id column="courseSequenceNO" property="sequenceNO"/>
+	  			<result column="courseID" property="ID"/>
+	  			<result column="parentID" property="parentID"/>
+	  			<result column="title" property="title"/>
+	  		</association>	
+   		</resultMap>
+   
+  	 	<select id="findAllCourse" resultMap="findCourse">
+  	 		select * from course
+  	 	</select>
+  	 	
+  	 	<select id="findCourseByID" parameterType="String" resultMap="findCourse">
+  	 		SELECT c.sequenceNO,c.ID,c.NAME,c.score,cy.sequenceNO as courseSequenceNO,cy.ID as courseID,cy.title 
+			FROM course AS c INNER JOIN category AS cy
+			ON c.category_id = cy.sequenceNO where c.ID = #{id}
+  	 	</select>
+  	 	
+  	 	<select id="findOtherCourse" parameterType="String" resultMap="findCourse">
+  	 		select * from course where ID != #{ID}
+  	 	</select>
+  	 	
+  	 	<select id="findCourseCount" resultType="int">
+  	 		select count(*) from course
+  	 	</select>
+  	 	
+  	 	<select id="findAllCourses" resultMap="findCourse">
+  	 		SELECT c.sequenceNO,c.ID,c.NAME,c.score,cy.sequenceNO as courseSequenceNO,cy.ID as courseID,cy.title 
+			FROM course AS c INNER JOIN category AS cy
+			ON c.category_id = cy.sequenceNO limit #{index},#{pageSize}
+  	 	</select>
+  	 	
+  	 	<select id="findCourseCountByCondition" parameterType="Course" resultType="int">
+  	 		SELECT count(*)
+			FROM course AS c INNER JOIN category AS cy
+			ON c.category_id = cy.sequenceNO 
+			<where>
+				<if test="name != null || name != '' ">
+					and c.Name like '%${name}%' 
+				</if>
+				<if test="category.ID != 0">
+					and cy.ID = #{category.ID} 
+				</if>
+			</where>
+  	 	</select>
+  	 	
+  	 	<select id="findCourseByCondition" parameterType="Map" resultMap="findCourse">
+  	 		SELECT c.sequenceNO,c.ID,c.NAME,c.score,cy.sequenceNO as courseSequenceNO,cy.ID as courseID,cy.title 
+			FROM course AS c INNER JOIN category AS cy
+			ON c.category_id = cy.sequenceNO 
+			<where>
+				<if test="name != null || name != '' ">
+					and c.Name like '%${name}%' 
+				</if>
+				<if test="ID != 0 ">
+					and cy.ID = #{ID} 
+				</if>
+			</where>
+			 limit #{index},#{pageSize}
+  	 	</select>
+  	 	
+  	 	<delete id="deleteCourse" parameterType="String">
+  	 		delete from course where ID = #{ID}
+  	 	</delete>
+  	 	
+  	 	<update id="updateCourse" parameterType="Course">
+  	 		update course 
+  	 		<set>
+  	 			<if test="name != null and name != '' ">
+  	 				name = #{name},
+  	 			</if>
+  	 			<if test="category.ID != null and category.ID != '' ">
+  	 				category_id = #{category.ID},
+  	 			</if>
+  	 			<if test="score != 0">
+  	 				score = #{score},
+  	 			</if>
+  	 		</set>
+  	 		where ID = #{ID}
+  	 	</update>
+  	 	
+  	 	<insert id="addCourse" parameterType="Course">
+  	 		insert into course(ID,Name,category_id,score) values(#{ID},#{name},#{category.sequenceNO},#{score})
+  	 	</insert>
+   </mapper>

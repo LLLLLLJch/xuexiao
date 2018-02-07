@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+   <mapper namespace="com.situ.xuexiao.dao.BanJiDao">
+   		<resultMap type="BanJi" id="findBanJi">
+   			<id column="sequenceNO" property="sequenceNO"/>
+	  		<result column="banjiID" property="ID"/>	
+	  		<result column="banjiname" property="name"/>	
+   		</resultMap>
+   
+  	 	<select id="findAllBanJi" resultMap="findBanJi">
+  	 		select sequenceNO,banjiID,banjiname from banji;
+  	 	</select>
+  	 	
+  	 	<select id="findBanJiCount" resultType="int">
+  	 		select count(*) from banji
+  	 	</select>
+  	 	
+  	 	<select id="findAllBanJiPageBean" resultMap="findBanJi">
+  	 		select * from banji limit #{index},#{pageSize}
+  	 	</select>
+  	 	
+		<select id="findUpdateBanji" parameterType="String" resultMap="findBanJi">
+			select * from banji where banjiID = #{ID}
+		</select>  
+		
+		<update id="updateBanji" parameterType="BanJi">
+			update banji
+  	 		<set>
+  	 			<if test="name != null and name != '' ">
+  	 				banjiname = #{name},
+  	 			</if>
+  	 		</set>
+  	 		WHERE banjiID = #{ID}
+		</update>	
+		
+		<delete id="deleteBanji" parameterType="String">
+			delete from banji where banjiID = #{ID}
+		</delete>
+		
+		<insert id="addBanji" parameterType="BanJi">
+			insert into banji(banjiID,banjiname) values (#{ID},#{name});
+		</insert> 	
+		
+		<select id="findBanJiCountByCondition" parameterType="String" resultType="int">
+			select count(*) from banji
+			<if test="_parameter != null || _parameter != '' ">
+				where banjiname like '%${_parameter}%'				
+			</if>
+		</select>
+		
+		<select id="findBanJiByCondition" parameterType="Map" resultMap="findBanJi">
+			select * from banji 
+			<if test="name != null || name != '' ">
+				where banjiname like '%${name}%'				
+			</if>
+			limit #{index},#{pageSize}
+		</select>
+		
+		<select id="findBanjiByID" parameterType="String" resultMap="findBanJi">
+			select * from banji where banjiID = #{ID}
+		</select>
+		
+		<select id="findOtherBanji" parameterType="String" resultMap="findBanJi">
+			select * from banji where banjiID != #{ID}
+		</select>
+   </mapper>

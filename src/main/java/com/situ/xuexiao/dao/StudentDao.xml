@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+   <mapper namespace="com.situ.xuexiao.dao.StudentDao">
+   		<resultMap type="Student" id="findStudent">
+   			<id column="sequenceNO" property="sequenceNO"/>
+	  		<result column="ID" property="ID"/>	
+	  		<result column="name" property="name"/>	
+	  		<result column="age" property="age"/>	
+	  		<result column="gender" property="gender"/>	
+	  		<result column="address" property="address"/>	
+	  		<result column="birthday" property="birthday"/>
+	  		<result column="picture" property="picture"/>
+	  		<result column="category_id" property="categoryID"/>
+	  		<association property="banji" javaType="BanJi">
+	  			<id column="banjiSequenceNO" property="sequenceNO"/>
+	  			<result column="banjiID" property="ID"/>
+	  			<result column="banjiname" property="name"/>
+	  		</association>
+   		</resultMap>
+   
+  	 	<select id="findAllStudents" resultMap="findStudent">
+  	 		select * 
+			from student as s inner join banji as b 
+			on s.banji_id = b.sequenceNO limit #{index},#{pageSize}
+  	 	</select>
+  	 	
+  	 	<select id="findStudentByCondition" parameterType="Map" resultType="Student" >
+  	 		SELECT s.ID,s.name,s.age,s.gender,s.address,s.birthday,b.banjiname  
+			FROM student AS s INNER JOIN banji AS b
+			ON s.banji_id = b.sequenceNO 
+			<where>
+				<if test="name != null || name != '' ">
+					and s.name like '%${name}%'
+				</if>
+				<if test="gender != 0">
+					and s.gender = #{gender}
+				</if>
+			</where> 
+			limit #{index},#{pageSize}
+  	 	</select>
+  	 	
+  	 	<select id="findStudentCount" resultType="int">
+  	 		select count(*) from student
+  	 	</select>
+  	 	
+  	 	<select id="findStudentCountByCondition" resultType="int">
+  	 		SELECT count(*)  
+			FROM student AS s INNER JOIN banji AS b
+			ON s.banji_id = b.sequenceNO 
+  	 		<where>
+  	 			<if test="name != null || name != '' ">
+					and s.name like '%${name}%'
+				</if>
+				<if test="gender != 0">
+					and s.gender = #{gender}
+				</if>
+  	 		</where>
+  	 	</select>
+  	 	
+  	 	<select id="findUpdateStudent" parameterType="String" resultMap="findStudent">
+  	 		SELECT s.ID,s.name,s.age,s.gender,s.address,s.birthday,s.picture,b.banjiID,b.banjiname,b.sequenceNO as banjiSequenceNO    
+			FROM student AS s INNER JOIN banji AS b
+			ON s.banji_id = b.sequenceNO where s.ID = #{id}	
+  	 	</select>
+  	 	
+  	 	<update id="updateStudent" parameterType="Student">
+  	 		update student 
+  	 		<set>
+  	 			<if test="name != null and name != '' ">
+  	 				name = #{name},
+  	 			</if>
+  	 			<if test="age != 0 and age != '' ">
+  	 				age = #{age},
+  	 			</if>
+  	 			<if test="gender != 0">
+  	 				gender = #{gender},
+  	 			</if>
+  	 			<if test="address != null and address != '' ">
+  	 				address = #{address},
+  	 			</if>
+  	 			<if test="birthday != null and birthday != '' ">
+  	 				birthday = #{birthday},
+  	 			</if>
+  	 			<if test="picture != null and picture != '' ">
+  	 				picture = #{picture},
+  	 			</if>
+  	 			<if test="banji != null">
+  	 				banji_id = #{banji.sequenceNO},
+  	 			</if>
+  	 		</set>
+  	 		WHERE ID = #{ID}
+  	 	</update>
+  	 	
+  	 	<delete id="deleteStudent" parameterType="String">
+  	 		delete from student where ID = #{ID}
+  	 	</delete>
+  	 	
+  	 	<insert id="addStudent" parameterType="Student">
+  	 		insert into student(ID,name,age,gender,address,birthday,picture,banji_id,category_id)
+  	 		values(#{ID},#{name},#{age},#{gender},#{address},#{birthday},#{picture},#{banji.sequenceNO},20)
+  	 	</insert>
+  	 	
+  	 	<select id="findStudentBanji" parameterType="int" resultType="int">
+  	 		select count(*) from student where banji_id = #{sequenceNO}
+  	 	</select>
+  	 	
+  	 	<select id="checkStudent" resultMap="findStudent">
+  	 		SELECT s.sequenceNO,s.ID,s.name,s.age,s.gender,s.address,s.birthday,s.picture,b.sequenceNO,b.banjiID,b.banjiname,b.sequenceNO as banjiSequenceNO    
+			FROM student AS s INNER JOIN banji AS b
+			ON s.banji_id = b.sequenceNO where s.name = #{name} and s.password = #{password}
+  	 	</select>
+   </mapper>
