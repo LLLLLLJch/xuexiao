@@ -12,4 +12,6 @@ public interface ICategoryService {
 
 	List<Category> findAskLeaveType();
 
+	List<Category> findAllAdviceType();
+
 }

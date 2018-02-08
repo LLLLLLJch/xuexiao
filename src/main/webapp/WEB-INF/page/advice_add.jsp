@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>请假信息</title>
+<title>学生信息</title>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/third/css/bootstrap.css"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/bootstrap.min.css"/>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/bootstrap-datetimepicker.min.css"/>
@@ -20,28 +20,23 @@
 		<form action="" method="post"
 		  enctype="multipart/form-data" class="form form-horizontal" id="form-add">
 		  <div class="form-group">
-		  	<label for="dtp_input2" class="col-md-2 control-label">开始日期</label>
-		    <div class="input-group date form_date col-md-5" data-date="" data-date-format="" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-               <input id="startTime" name="startTime" class="form-control" size="16" type="text" value="" readonly>
-               <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-         	   <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-         	</div>
+		    <label for="exampleInputEmail1">标题:</label>
+		    <input type="text" class="form-control" id="title" name="title">
 		  </div>
-		   <div class="form-group">
-		  	<label for="dtp_input2" class="col-md-2 control-label">截至日期</label>
-		    <div class="input-group date form_date col-md-5" data-date="" data-date-format="" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-               <input id="endTime" name="endTime" class="form-control" size="16" type="text" value="" readonly>
-               <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-         	   <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-         	</div>
+		  <div class="form-group">
+		    <label for="exampleInputPassword1">内容:</label>
+		    <input type="text" class="form-control" id="content" name="content">
 		  </div>
-		   <div class="form-group">
-		    <label for="exampleInputEmail1">内容:</label>
-		    <textarea class="form-control" name="content" rows="3"></textarea>
+		  <div class="form-group">
+		    <label for="exampleInputPassword1">图片:</label>
+		     <img alt="" id="imgId" src="" width=100
+			 height=100> <input type="hidden" name="picture"
+			 id="mainImage" /> <input type="file" name="pictureFile"
+			 onchange="uploadPic();" />
 		  </div>
-		   <div class="form-group">
-		    <label for="exampleInputPassword1">请假类型:</label>
-		    <select class="form-control" name="category.ID" id="categoryID">
+		  <div class="form-group">
+		    <label for="exampleInputPassword1">建议类型:</label>
+		    <select class="form-control" name="category.sequenceNO" id="type">
 		    </select>
 		  </div>
 		  <button type="button" class="btn btn-default" onclick="add();">提交</button>
@@ -57,20 +52,9 @@
 <script src="${pageContext.request.contextPath}/js/jquery.form.js" type="text/javascript" charset="utf-8"></script>
 <script src="${pageContext.request.contextPath}/third/layer-v3.1.1/layer/layer.js" type="text/javascript"></script>
 <script type="text/javascript">
-$('.form_date').datetimepicker({
-    language: 'zh-CN',
-    weekStart: 1,
-    todayBtn: 1,
-    autoclose: 1,
-    todayHighlight: 1,
-    startView: 2,
-    minView: 2,
-    forceParse: 0
-});
-
 $(function(){
 	$.ajax({
-		url:"${pageContext.request.contextPath}/categoryIndex/findAskLeaveType.action",
+		url:"${pageContext.request.contextPath}/categoryIndex/findAllAdviceType.action",
 		contentType:"application/json",
 		type:"POST",
 		dataType:"json",
@@ -79,7 +63,7 @@ $(function(){
 			for(var i=0;i<data.length;i++){
 				html +="<option value='"+data[i].sequenceNO+"'>"+data[i].title+"</option>";
 			}
-			$("#categoryID").html(html);
+			$("#type").html(html);
         }
 	});
 });
@@ -140,7 +124,7 @@ KindEditor.ready(function(K) {
 function add(){
 	console.log($("#form-add").serialize());
 	var options = {
-			url:"${pageContext.request.contextPath}/askLeaveIndex/addAskLeave.action",
+			url:"${pageContext.request.contextPath}/adviceIndex/addAdvice.action",
 			type:"post",
 			dataType:"json",
 			data:$("#form-add").serialize(),
@@ -149,20 +133,28 @@ function add(){
 				if(data.status==0){
 					 layer.open({
 						  content: data.msg
-						  ,btn: ['继续申请']
+						  ,btn: ['继续提出', '返回建议页面']
 						  ,yes: function(index, layero){
-							  window.location.href="${pageContext.request.contextPath}/askLeaveIndex/goAddPage.action";
-						  },cancel: function(){ 
+							  window.location.href="${pageContext.request.contextPath}/adviceIndex/goAddPage.action";
+						  }
+						  ,btn2: function(index, layero){
+							  window.location.href="${pageContext.request.contextPath}/adviceIndex/findAllAdvice.action";
+						  }
+						  ,cancel: function(){ 
 						    
 						  }
 						}); 
 	           	} else{
 	           		layer.open({
 						  content: data.msg
-						  ,btn: ['继续申请']
+						  ,btn: ['继续添加', '返回学生页面']
 						  ,yes: function(index, layero){
-							  window.location.href="${pageContext.request.contextPath}/askLeaveIndex/goAddPage.action";
-						  },cancel: function(){ 
+							  window.location.href="${pageContext.request.contextPath}/adviceIndex/goAddPage.action";
+						  }
+						  ,btn2: function(index, layero){
+							  window.location.href="${pageContext.request.contextPath}/adviceIndex/findAllAdvice.action";
+						  }
+						  ,cancel: function(){ 
 						    
 						  }
 						}); 

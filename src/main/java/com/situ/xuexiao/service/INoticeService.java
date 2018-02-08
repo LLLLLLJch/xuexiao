@@ -20,4 +20,10 @@ public interface INoticeService {
 	PageBean<Notice> findStudentNoticeByCondition(int pageIndex, int pageSize,
 			FindNoticeByCondition findNoticeByCondition);
 
+	SeverResponse<Notice> deleteNotice(String ID);
+
+	SeverResponse<Notice> deleteAll(String[] selectedIds);
+
+	Notice findNoticeByID(String ID);
+
 }

@@ -36,6 +36,7 @@ public class NoticeServiceImpl implements INoticeService{
 		map.put("index", index);
 		map.put("pageSize", pageSize);
 		List<Notice> list = noticeDao.findAllAskLeavePageBean(map);
+		System.out.println(list);
 		pageBean.setList(list);
 		return pageBean;
 	}
@@ -54,6 +55,7 @@ public class NoticeServiceImpl implements INoticeService{
 		map.put("index", index);
 		map.put("pageSize", pageSize);
 		List<Notice> list = noticeDao.findTeacherNotice(map);
+		System.out.println(list);
 		pageBean.setList(list);
 		return pageBean;
 	}
@@ -119,5 +121,31 @@ public class NoticeServiceImpl implements INoticeService{
 		System.out.println(list);
 		pageBean.setList(list);
 		return pageBean;
+	}
+
+	@Override
+	public SeverResponse<Notice> deleteNotice(String ID) {
+		if(noticeDao.deleteNotice(ID)>0) {
+			return SeverResponse.createSuccess("删除成功");
+		}
+		return SeverResponse.createError("删除失败");
+	}
+
+	@Override
+	public SeverResponse<Notice> deleteAll(String[] selectedIds) {
+		int count = 0;
+		for (String ID : selectedIds) {
+			noticeDao.deleteNotice(ID);
+			count++;
+		}
+		if(selectedIds.length == count) {
+			return SeverResponse.createSuccess("删除成功");
+		}
+		return SeverResponse.createError("删除失败");
+	}
+
+	@Override
+	public Notice findNoticeByID(String ID) {
+		return noticeDao.showNotice(ID);
 	}
 }

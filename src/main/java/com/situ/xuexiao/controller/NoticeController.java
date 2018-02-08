@@ -101,4 +101,23 @@ public class NoticeController {
 		model.addAttribute("findNoticeByCondition", findNoticeByCondition);
 		return "notice_list";
 	}
+	
+	@RequestMapping("deleteNotice")
+	@ResponseBody
+	public SeverResponse<Notice> deleteNotice(String ID) {
+		return noticeService.deleteNotice(ID);
+	}
+	
+	@RequestMapping("deleteAll")
+	@ResponseBody
+	public SeverResponse<Notice> deleteAll(String[] selectedIds) {
+		return noticeService.deleteAll(selectedIds);
+	}
+	
+	@RequestMapping("showNotice")
+	public String showNotice(Model model,String ID) {
+		Notice notice = noticeService.findNoticeByID(ID);
+		model.addAttribute("notice", notice);
+		return "notice_show";
+	}
 }

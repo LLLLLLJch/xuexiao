@@ -22,4 +22,8 @@
    		<select id="findAskLeaveType" resultMap="findCategory">
    			select * from category where parentID = 13
    		</select>
+   		
+   		<select id="findAllAdviceType" resultMap="findCategory">
+   			select * from category where parentID = 27;
+   		</select>
    </mapper>

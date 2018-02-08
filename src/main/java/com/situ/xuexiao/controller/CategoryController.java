@@ -28,4 +28,10 @@ public class CategoryController {
 	public List<Category> findAskLeaveType() {
 		return categoryService.findAskLeaveType();
 	}
+	
+	@RequestMapping("findAllAdviceType")
+	@ResponseBody
+	public List<Category> findAllAdviceType() {
+		return categoryService.findAllAdviceType();
+	}
 }

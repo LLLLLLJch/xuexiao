@@ -26,6 +26,13 @@
 	  		</association>	
    		</resultMap>
    		
+   		<select id="showNotice" parameterType="String" resultMap="findNotice">
+   			SELECT n.sequenceNO,n.ID,n.title,n.content,n.category_id,n.picture,n.postedDate,t.sequenceNO AS teacherSequenceNO,t.ID AS teacherID,t.name,c.ID AS categoryID,c.parentID 
+			FROM notice AS n INNER JOIN teacher AS t 
+			ON n.publisher = t.sequenceNO INNER JOIN category AS c
+			ON c.sequenceNO = n.category_id where n.ID = #{ID}
+   		</select>
+   		
    		<select id="findAskLeaveCount" resultType="int">
    			SELECT count(*)
 			FROM notice AS n INNER JOIN teacher AS t 
@@ -44,14 +51,14 @@
    			SELECT n.sequenceNO,n.ID,n.title,n.content,n.category_id,n.picture,n.postedDate,t.sequenceNO AS teacherSequenceNO,t.ID AS teacherID,t.name,c.ID AS categoryID,c.parentID 
 			FROM notice AS n INNER JOIN teacher AS t 
 			ON n.publisher = t.sequenceNO INNER JOIN category AS c
-			ON c.sequenceNO = n.category_id where c.parentID = 26 limit #{index},#{pageSize}
+			ON c.sequenceNO = n.category_id where c.parentID = 26 order by n.postedDate DESC limit #{index},#{pageSize}
    		</select>
    		
    		<select id="findTeacherNotice" parameterType="Map" resultMap="findNotice">
    			SELECT n.sequenceNO,n.ID,n.title,n.content,n.category_id,n.picture,n.postedDate,t.sequenceNO AS teacherSequenceNO,t.ID AS teacherID,t.name,c.ID AS categoryID,c.parentID 
 			FROM notice AS n INNER JOIN teacher AS t 
 			ON n.publisher = t.sequenceNO INNER JOIN category AS c
-			ON c.sequenceNO = n.category_id where c.parentID = 4 or c.parentID = 26 limit #{index},#{pageSize}
+			ON c.sequenceNO = n.category_id where c.parentID = 4 or c.parentID = 26 order by n.postedDate DESC limit #{index},#{pageSize}
    		</select>
    		
    		<insert id="addAllNotice" parameterType="Notice">
@@ -110,7 +117,7 @@
 					and n.postedDate between  #{startTime} and #{endTime}
 				</if>
 			</where>
-			 limit #{index},#{pageSize}
+			 order by n.postedDate DESC limit #{index},#{pageSize}
    		</select>
    		
    		<select id="findStudentNoticeByCondition" parameterType="Map" resultMap="findNotice">
@@ -127,6 +134,10 @@
 					and n.postedDate between  #{startTime} and #{endTime}
 				</if>
 			</where>
-			 limit #{index},#{pageSize}
+			 order by n.postedDate DESC limit #{index},#{pageSize}
    		</select>
+   		
+   		<delete id="deleteNotice" parameterType="String">
+   			delete from notice where ID = #{ID};
+   		</delete>
    </mapper>

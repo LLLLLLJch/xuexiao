@@ -28,4 +28,9 @@ public class CategoryServiceImpl implements ICategoryService{
 	public List<Category> findAskLeaveType() {
 		return categoryDao.findAskLeaveType();
 	}
+
+	@Override
+	public List<Category> findAllAdviceType() {
+		return categoryDao.findAllAdviceType();
+	}
 }

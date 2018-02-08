@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+   <mapper namespace="com.situ.xuexiao.dao.AdviceDao">
+   		<resultMap type="Advice" id="findAdvice">
+   			<id column="sequenceNO" property="sequenceNO"/>
+	  		<result column="ID" property="ID"/>	
+	  		<result column="title" property="title"/>	
+	  		<result column="content" property="content"/>	
+	  		<result column="postedDate" property="postedDate"/>	
+	  		<result column="picture" property="picture"/>	
+	  		<association property="category" javaType="Category">
+	  			<id column="categorySequenceNO" property="sequenceNO"/>
+	  			<result column="categoryID" property="ID"/>
+	  			<result column="parentID" property="parentID"/>
+	  			<result column="categoryTitle" property="title"/>
+	  		</association>	
+   		</resultMap>
+   		
+   		<select id="findAdviceCount" resultType="int">
+   			select count(*) from advice
+   		</select>
+   		
+   		<select id="findAllAdvice" resultMap="findAdvice">
+   			SELECT a.sequenceNO,a.ID,a.title,a.content,a.postedDate,a.picture,c.sequenceNO AS categorySequenceNO,c.ID AS categoryID,c.title as categoryTitle,c.parentID
+			FROM advice AS a INNER JOIN category AS c 
+			ON a.category_id = c.sequenceNO limit #{index},#{pageSize}
+   		</select>
+   		
+   		<insert id="addAdvice" parameterType="Advice">
+   			insert into advice (ID,title,content,picture,postedDate,category_id)
+   			values(#{ID},#{title},#{content},#{picture},#{postedDate},#{category.sequenceNO});
+   		</insert>
+   		
+   		<select id="findAdviceCountByCondition" parameterType="FindAdviceByCondition" resultType="int" >
+   			select count(*)
+   			FROM advice AS a INNER JOIN category AS c 
+			ON a.category_id = c.sequenceNO 
+			<where>
+				<if test="title != null and title != '' ">
+					and a.title = #{title}
+				</if>
+				<if test="startTime != null and endTime != null ">
+					and a.postedDate between #{startTime} and #{endTime}
+				</if>
+				<if test="category_id != null and category_id != '' ">
+					and c.sequenceNO = #{category_id}
+				</if>
+			</where>
+   		</select>
+   		
+   		<select id="findAdviceByCondition" parameterType="Map" resultMap="findAdvice">
+   			SELECT a.sequenceNO,a.ID,a.title,a.content,a.postedDate,a.picture,c.sequenceNO AS categorySequenceNO,c.ID AS categoryID,c.title as categoryTitle,c.parentID
+			FROM advice AS a INNER JOIN category AS c 
+			ON a.category_id = c.sequenceNO 
+			<where>
+				<if test="title != null and title != '' ">
+					and a.title = #{title}
+				</if>
+				<if test="startTime != null and endTime != null ">
+					and a.postedDate between #{startTime} and #{endTime}
+				</if>
+				<if test="category_id != null and category_id != '' ">
+					and c.sequenceNO = #{category_id}
+				</if>
+			</where>
+			limit #{index},#{pageSize}
+   		</select>
+   </mapper>

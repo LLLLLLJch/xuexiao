@@ -113,16 +113,12 @@
 							<li><a class="J_menuItem" href="${pageContext.request.contextPath}/noticeIndex/goAddPage.action">发布公告</a>
 							</li>
 						</ul></li>
-					<li class="line dk"></li>
-					<li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-						<span class="ng-scope">分类</span>
-					</li>
 					<li><a href="#"><i class="fa fa-picture-o"></i> <span
-							class="nav-label">相册</span><span class="fa arrow"></span></a>
+							class="nav-label">建议管理</span><span class="fa arrow"></span></a>
 						<ul class="nav nav-second-level">
-							<li><a class="J_menuItem" href="basic_gallery.html">基本图库</a>
+							<li><a class="J_menuItem" href="${pageContext.request.contextPath}/adviceIndex/goAddPage.action">提出建议</a>
 							</li>
-							<li><a class="J_menuItem" href="carousel.html">图片切换</a></li>
+							<li><a class="J_menuItem" href="${pageContext.request.contextPath}/adviceIndex/findAllAdvice.action">建议列表</a></li>
 							<li><a class="J_menuItem" href="blueimp.html">Blueimp相册</a>
 							</li>
 						</ul></li>

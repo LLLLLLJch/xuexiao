@@ -30,7 +30,7 @@
 		layer.alert('',{
 			icon:2,title:'删除确认',content:'您确定要删除这条记录吗？',closeBtn:1},function(index){
 				$.post(
-	            "${pageContext.request.contextPath}/studentIndex/deleteStudent.action",
+	            "${pageContext.request.contextPath}/noticeIndex/deleteNotice.action",
 	            {"ID":ID},
 	            function(data) {
 	            	if(data.status == 0){
@@ -56,18 +56,6 @@
 			});
 	}
 	
-	function update(ID){
-		layer.open({
-  	      type: 2,
-  	      title: '修改面板',
-  	      shadeClose: true,
-  	      shade: false,
-  	      maxmin: true, //开启最大化最小化按钮
-  	      area: ['893px', '500px'],
-  	      content: "${pageContext.request.contextPath}/studentIndex/findUpdateStudent.action?ID="+ID
-  	    });
-	}
-	
 	function selectId(){
 		$("input[name = selectedIds]").prop("checked",$("#selectedAll").is(":checked"));
 	}
@@ -76,7 +64,7 @@
 	    layer.alert('',{
 			icon:2,title:'删除确认',content:'您确定要删除吗？',closeBtn:1},function(index){
 				$.post(
-	            "${pageContext.request.contextPath}/studentIndex/deleteAll.action",
+	            "${pageContext.request.contextPath}/noticeIndex/deleteAll.action",
 	            $("#mainForm").serialize(),
 	            function(data) {
 	            	if(data.status == 0){
@@ -102,14 +90,6 @@
 		});
 	}
 	
-	$(function(){
-		if('${findStudentByCondition.gender}' == ""){
-			$("#gender").val(0);
-		}else{
-			$("#gender").val('${findStudentByCondition.gender}');
-		}
-	}); 
-	
 	function removeAll(){
 		$("#searchForm")[0].reset(); 
 		if('${num}' == '1'){
@@ -127,7 +107,7 @@
 	  	      shade: false,
 	  	      maxmin: true, //开启最大化最小化按钮
 	  	      area: ['893px', '500px'],
-	  	      content: "${pageContext.request.contextPath}/studentIndex/showStudent.action?ID="+ID
+	  	      content: "${pageContext.request.contextPath}/noticeIndex/showNotice.action?ID="+ID
 	  	    });
 	}
 </script>
@@ -148,32 +128,48 @@
 	  <button type="submit" class="btn btn-default">搜索</button>
 	</form>
 	<form id="mainForm" action="" method="post">
-	<input type="button" value="批量删除" onclick="deleteAll();" class="btn btn-default"/>
+	<c:if test="${num == 2}">
+		<input type="button" value="批量删除" onclick="deleteAll();" class="btn btn-default"/>
+	</c:if>
 		<table class="table table-bordered">
 			<tr>
 				<td>
-					<input type="checkbox" id="selectedAll" onclick="selectId();">
 				</td>
 				<td>标题</td>
 				<td>内容</td>
 				<td>图片</td>
 				<td>发布日期</td>
 				<td>发布人</td>
-				<td>修改</td>
 				<td>删除</td>
 			</tr>
 			<c:forEach items="${pageBean.list}" var="notice">
 			<tr>
-				<td>
-					<input type="checkbox" name="selectedIds" value="${notice.ID}">
-				</td>
+				<c:if test="${notice.publisher.ID == teacher.ID}">
+					<td>
+						<input type="checkbox" name="selectedIds" value="${notice.ID}">
+					</td>
+				</c:if>
+				<c:if test="${notice.publisher.ID != teacher.ID}">
+					<td>
+						<input type="checkbox" name="selectedIds" disabled="disabled" value="${notice.ID}">
+					</td>
+				</c:if>
 				<td><a href="javascript:showStudent('${notice.ID}');">${notice.title}</a></td>
 				<td>${notice.content}</td>
-				<td>${notice.picture}</td>
+				<td><img src="http://owyysts4w.bkt.clouddn.com/${notice.picture}" width="100" height="80"></td>
 				<td><fmt:formatDate value='${notice.postedDate}' pattern='yyyy-MM-dd'/></td>
 				<td>${notice.publisher.name}</td>
-				<td><a href="javascript:update('${notice.ID}')">修改</a></td>
-				<td><a href="javascript:goDeleteStudent('${notice.ID}');">删除</a></td>
+				<c:if test="${num == 2}">
+					<c:if test="${notice.publisher.ID == teacher.ID}">
+						<td><a href="javascript:goDeleteStudent('${notice.ID}');">删除</a></td>
+					</c:if>
+					<c:if test="${notice.publisher.ID != teacher.ID}">
+						<td>删除</td>
+					</c:if>
+				</c:if>
+				<c:if test="${num == 1}">
+					<td>删除</td>
+				</c:if>
 			</tr>
 			</c:forEach>
 		</table>

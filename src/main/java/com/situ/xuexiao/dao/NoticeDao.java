@@ -28,4 +28,8 @@ public interface NoticeDao {
 
 	List<Notice> findStudentNoticeByCondition(Map<String, Object> map);
 
+	int deleteNotice(String ID);
+
+	Notice showNotice(String ID);
+
 }
